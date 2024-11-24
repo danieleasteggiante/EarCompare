@@ -32,8 +32,8 @@ public class CompareController {
         EarProperties earProperties2 = rapidChecks(fileEar2);
         if (earProperties2.equals(earProperties1))
             return generateEarDifferences(earProperties1, earProperties2);
-        deepCheck(new CustomFileTmp(fileEar1.getPath(), fileEar1.getName(), Files.readAllBytes(fileEar1.toPath())), earProperties1);
-        deepCheck(new CustomFileTmp(fileEar2.getPath(), fileEar2.getName(), Files.readAllBytes(fileEar2.toPath())), earProperties2);
+        deepCheck(new CustomFileTmp(fileEar1.getPath(), fileEar1.getName(), Files.readAllBytes(fileEar1.toPath()), fileEar1.length(), fileEar1.lastModified()), earProperties1);
+        deepCheck(new CustomFileTmp(fileEar2.getPath(), fileEar2.getName(), Files.readAllBytes(fileEar2.toPath()), fileEar2.length(), fileEar2.lastModified()), earProperties2);
         return generateEarDifferences(earProperties1, earProperties2);
     }
 
@@ -80,7 +80,7 @@ public class CompareController {
         try {
             Path tempJar = Files.createTempFile("tempJar", ".jar");
             Files.copy(jarFile.getInputStream(entry), tempJar, StandardCopyOption.REPLACE_EXISTING);
-            return new CustomFileTmp(tempJar.toFile().getPath(), entry.getName(), Files.readAllBytes(tempJar));
+            return new CustomFileTmp(tempJar.toFile().getPath(), entry.getName(), Files.readAllBytes(tempJar), entry.getSize(), entry.getTime());
         } catch (IOException e) {
             System.err.println("Error while creating temp file " + e.getMessage());
             throw new RuntimeException(e);

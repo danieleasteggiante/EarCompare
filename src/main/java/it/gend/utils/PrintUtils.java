@@ -54,10 +54,21 @@ public class PrintUtils {
                 System.out.println("[+] Printing files with differences");
                 earDifferences.getCommonFilesWithDifference().forEach(System.out::println);
                 break;
+            case 4:
+                System.out.println("[+] Printing record in txt");
+                createTxt(earDifferences);
+            case 5:
+                System.out.println("[+] Exiting");
+                System.exit(0);
             default:
                 System.out.println("[-] Invalid choice");
                 break;
         }
+    }
+
+    private static void createTxt(EarDifferences earDifferences) {
+        System.out.println("[+] Creating txt file");
+        //TODO: Implement this method
     }
 
     private static void printSpecificDifferencesMenu() {

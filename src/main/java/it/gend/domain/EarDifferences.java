@@ -87,8 +87,12 @@ public class EarDifferences {
                 }
             }
             if (!found)
-                differentFiles.add("ear1-" + file.getName());
+                differentFiles.add(createFileInfo(ear1Name, file));
         }
+    }
+
+    private String createFileInfo(String ear1Name, CustomFileTmp file) {
+        return ear1Name + "-" + file.getName() + "-" + file.getSize() + "-" + file.getLastModified();
     }
 
 
