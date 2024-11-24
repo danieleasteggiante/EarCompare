@@ -8,7 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Daniele Asteggiante
@@ -21,16 +23,15 @@ public class EarDifferences {
     List<CustomFileTmp> commonFiles = new ArrayList<>();
     List<String> differentFiles = new ArrayList<>();
     List<String> commonFilesWithDifference = new ArrayList<>();
-    StringBuilder difference;
+    List<String> differencesForFiles = new ArrayList<>();
     boolean equals = false;
 
     public EarDifferences(EarProperties ear1, EarProperties ear2) {
         this.ear1 = ear1;
         this.ear2 = ear2;
-        this.difference = new StringBuilder();
-        this.checkCommonJars(ear1,ear2);
-        this.checkDifferntJars(ear1,ear2,ear1.getName());
-        this.checkDifferntJars(ear2,ear1,ear2.getName());
+        this.checkCommonJars(ear1, ear2);
+        this.checkDifferntJars(ear1, ear2, ear1.getName());
+        this.checkDifferntJars(ear2, ear1, ear2.getName());
         this.checkCommonFiles(ear1, ear2);
         this.checkDifferentFiles(ear1, ear2, ear1.getName());
         this.checkDifferentFiles(ear2, ear1, ear2.getName());
@@ -92,7 +93,8 @@ public class EarDifferences {
     }
 
     private String createFileInfo(String ear1Name, CustomFileTmp file) {
-        return ear1Name + "-" + file.getName() + "-" + file.getSize() + "-" + file.getLastModified();
+        Date date = new Date(file.getLastModified());
+        return ear1Name + "-" + file.getName() + "-" + file.getSize() + "-" + date;
     }
 
 
@@ -137,9 +139,9 @@ public class EarDifferences {
         }
     }
 
-    public String compareFiles(CustomFileTmp customFile1, CustomFileTmp customFile2) {
+    public void compareFiles(CustomFileTmp customFile1, CustomFileTmp customFile2) {
         StringBuilder sb = new StringBuilder();
-        File file1 = writeByteArrayToFile(customFile1.getContent(),"tempFile1");
+        File file1 = writeByteArrayToFile(customFile1.getContent(), "tempFile1");
         File file2 = writeByteArrayToFile(customFile2.getContent(), "tempFile2");
         try (BufferedReader reader1 = new BufferedReader(new FileReader(file1));
              BufferedReader reader2 = new BufferedReader(new FileReader(file2))) {
@@ -147,24 +149,25 @@ public class EarDifferences {
             String line1 = reader1.readLine();
             String line2 = reader2.readLine();
             int lineNumber = 1;
-            int diffCount = 0;
-            sb.append("Nel file ").append(customFile1.getName()).append(" ci sono le seguenti differenze:");
+            sb.append("\n\nNel file ").append(customFile1.getName()).append(" ci sono le seguenti differenze:");
             while (line1 != null || line2 != null) {
                 if (line1 == null || !line1.equals(line2)) {
                     sb.append("\nDifference at line ").append(lineNumber)
                             .append("\nFile1: ").append(line1 != null ? line1 : "EOF")
                             .append("\nFile2: ").append(line2 != null ? line2 : "EOF");
-                    diffCount++;
-                    commonFilesWithDifference.add(customFile1.getName());
+                    commonFilesWithDifference.add(customFile1.getName());;
                 }
                 line1 = reader1.readLine();
                 line2 = reader2.readLine();
                 lineNumber++;
             }
-            return diffCount == 0 ? null : sb.toString();
+            differencesForFiles.add(sb.toString());
         } catch (IOException e) {
             System.err.println("Error while reading file " + e.getMessage());
             throw new RuntimeException(e);
+        } finally {
+            file1.delete();
+            file2.delete();
         }
     }
 
@@ -175,7 +178,10 @@ public class EarDifferences {
     private void checkDifference(CustomFileTmp file, CustomFileTmp file2) {
         if (!file.getName().equals(file2.getName()))
             return;
-        difference.append(compareFiles(file, file2));
+        if (Objects.equals(file.getSize(), file2.getSize())
+                && Objects.equals(file.getLastModified(), file2.getLastModified()))
+            return;
+       compareFiles(file, file2);
     }
 
     public EarProperties getEar1() {
@@ -193,8 +199,8 @@ public class EarDifferences {
         return differentFiles && differentJars && commonFilesWithDifference;
     }
 
-    public String getFileDifference() {
-        return difference.toString();
+    public List<String> getDifferencesForFiles() {
+        return differencesForFiles;
     }
 
 }

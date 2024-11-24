@@ -34,11 +34,11 @@ public class CustomFileTmp {
         return content;
     }
 
-    public String getSize() {
+    public long getSize() {
         return size;
     }
 
-    public String getLastModified() {
+    public long getLastModified() {
         return lastModified;
     }
 }

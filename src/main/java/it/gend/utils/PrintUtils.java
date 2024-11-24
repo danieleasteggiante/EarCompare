@@ -1,10 +1,13 @@
 package it.gend.utils;
 
 import com.github.lalyos.jfiglet.FigletFont;
+import it.gend.controller.ReportGeneratorController;
 import it.gend.domain.EarDifferences;
+import it.gend.domain.InputUser;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.SortedMap;
 
 /**
  * @author Daniele Asteggiante
@@ -17,6 +20,19 @@ public class PrintUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static InputUser readInputUser() {
+        PrintUtils.printWelcome();
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Insert path of ear1: ");
+        String pathEar1 = scanner.nextLine();
+
+        System.out.println("Insert path of ear2: ");
+        String pathEar2 = scanner.nextLine();
+
+        return new InputUser(pathEar1, pathEar2);
     }
 
     public static void printDifferences(EarDifferences differences) {
@@ -32,15 +48,16 @@ public class PrintUtils {
     }
 
     public static void printSpecificDifferences(EarDifferences earDifferences) {
+        Scanner scanner = new Scanner(System.in);
         while (true) {
             printSpecificDifferencesMenu();
-            Scanner scanner = new Scanner(System.in);
             int choice = scanner.nextInt();
-            printChoice(earDifferences, choice);
+            printChoice(earDifferences, choice, scanner);
         }
+
     }
 
-    private static void printChoice(EarDifferences earDifferences, int choice) {
+    private static void printChoice(EarDifferences earDifferences, int choice, Scanner scanner) {
         switch (choice) {
             case 1:
                 System.out.println("[+] Printing different jars");
@@ -59,6 +76,7 @@ public class PrintUtils {
                 createTxt(earDifferences);
             case 5:
                 System.out.println("[+] Exiting");
+                scanner.close();
                 System.exit(0);
             default:
                 System.out.println("[-] Invalid choice");
@@ -67,8 +85,12 @@ public class PrintUtils {
     }
 
     private static void createTxt(EarDifferences earDifferences) {
+        System.out.println("[+] Insert path and name of txt file (ex. /home/user/report.txt)");
+        Scanner scanner = new Scanner(System.in);
+        String path = scanner.nextLine();
         System.out.println("[+] Creating txt file");
-        //TODO: Implement this method
+        ReportGeneratorController reportGeneratorController = new ReportGeneratorController(earDifferences, path);
+        reportGeneratorController.printReport();
     }
 
     private static void printSpecificDifferencesMenu() {
@@ -76,5 +98,7 @@ public class PrintUtils {
         System.out.println(" - Select 1 for print different jars");
         System.out.println(" - Select 2 for print different files");
         System.out.println(" - Select 3 for print files with differences");
+        System.out.println(" - Select 4 for create txt report");
+        System.out.println(" - Select 5 for exit");
     }
 }

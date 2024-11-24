@@ -92,7 +92,6 @@ public class CompareController {
     }
 
     private static EarProperties rapidChecks(File fileEar) {
-        //C:\Users\daniele.asteggiante\OneDrive\Desktop\ear-cscbackend_1.ear
         EarProperties earProperties = new EarProperties();
         earProperties.setPath(fileEar.getAbsolutePath());
         earProperties.setName(fileEar.getName());
