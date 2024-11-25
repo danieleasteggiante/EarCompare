@@ -70,7 +70,7 @@ public class ReportGeneratorController {
             printDifferentJars();
             printDifferentFiles();
             printCommonFilesWithDifference();
-            printDifferenceForFiles();
+            //printDifferenceForFiles();
             fileWriter.close();
         } catch (IOException e) {
             System.err.println("Error during report generation " + e.getMessage());

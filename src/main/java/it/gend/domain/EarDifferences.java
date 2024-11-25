@@ -24,7 +24,6 @@ public class EarDifferences {
     List<String> differentFiles = new ArrayList<>();
     List<String> commonFilesWithDifference = new ArrayList<>();
     List<String> differencesForFiles = new ArrayList<>();
-    boolean equals = false;
 
     public EarDifferences(EarProperties ear1, EarProperties ear2) {
         this.ear1 = ear1;
@@ -181,7 +180,17 @@ public class EarDifferences {
         if (Objects.equals(file.getSize(), file2.getSize())
                 && Objects.equals(file.getLastModified(), file2.getLastModified()))
             return;
-       compareFiles(file, file2);
+       //compareFiles(file, file2); TODO da migliorare con SET e most common substring
+        commonFilesWithDifference.add(createInfoDifference(file, file2));
+    }
+
+    private String createInfoDifference(CustomFileTmp file, CustomFileTmp file2) {
+        String date1 = new Date(file.getLastModified()).toString();
+        String date2 = new Date(file2.getLastModified()).toString();
+        String header = "File " + file.getName() + " ha differenze con il file " + file2.getName() + "\n";
+        String descriptionFile1 = file.getName() + "-" + file.getSize() + "-" + date1 + "\n";
+        String descriptionFile2 = file2.getName() + "-" + file2.getSize() + "-" + date2;
+        return header + descriptionFile1 + descriptionFile2;
     }
 
     public EarProperties getEar1() {

@@ -42,7 +42,7 @@ public class PrintUtils {
             return;
         }
         System.out.println("[+] Jars not common nr.: " + differences.getDifferentJars().size());
-        System.out.println("[+] File not common nr.: " + differences.getDifferentJars().size());
+        System.out.println("[+] File not common nr.: " + differences.getDifferentFiles().size());
         System.out.println("[+] Files has differences: " + differences.getCommonFilesWithDifference().size());
 
     }
@@ -68,7 +68,7 @@ public class PrintUtils {
                 earDifferences.getDifferentFiles().forEach(System.out::println);
                 break;
             case 3:
-                System.out.println("[+] Printing files with differences");
+                System.out.println("[+] Printing common files with differences");
                 earDifferences.getCommonFilesWithDifference().forEach(System.out::println);
                 break;
             case 4:
