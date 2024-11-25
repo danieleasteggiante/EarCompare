@@ -177,19 +177,16 @@ public class EarDifferences {
     private void checkDifference(CustomFileTmp file, CustomFileTmp file2) {
         if (!file.getName().equals(file2.getName()))
             return;
-        if (Objects.equals(file.getSize(), file2.getSize())
-                && Objects.equals(file.getLastModified(), file2.getLastModified()))
+        if (Objects.equals(file.getSize(), file2.getSize()))
             return;
        //compareFiles(file, file2); TODO da migliorare con SET e most common substring
         commonFilesWithDifference.add(createInfoDifference(file, file2));
     }
 
     private String createInfoDifference(CustomFileTmp file, CustomFileTmp file2) {
-        String date1 = new Date(file.getLastModified()).toString();
-        String date2 = new Date(file2.getLastModified()).toString();
-        String header = "File " + file.getName() + " ha differenze con il file " + file2.getName() + "\n";
-        String descriptionFile1 = file.getName() + "-" + file.getSize() + "-" + date1 + "\n";
-        String descriptionFile2 = file2.getName() + "-" + file2.getSize() + "-" + date2;
+        String header = "\nFile " + file.getName() + " ha differenze con il file " + file2.getName() + "\n";
+        String descriptionFile1 = file.getName() + " - size: " + file.getSize() + "\n";
+        String descriptionFile2 = file2.getName() + " - size: " + file2.getSize() + "\n";
         return header + descriptionFile1 + descriptionFile2;
     }
 
@@ -211,5 +208,4 @@ public class EarDifferences {
     public List<String> getDifferencesForFiles() {
         return differencesForFiles;
     }
-
 }
