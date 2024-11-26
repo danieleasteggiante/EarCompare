@@ -148,7 +148,7 @@ public class EarDifferences {
             String line1 = reader1.readLine();
             String line2 = reader2.readLine();
             int lineNumber = 1;
-            sb.append("\n\nNel file ").append(customFile1.getName()).append(" ci sono le seguenti differenze:");
+            sb.append("\nIn file ").append(customFile1.getName()).append(" there are differences with file ").append(customFile2.getName());
             while (line1 != null || line2 != null) {
                 if (line1 == null || !line1.equals(line2)) {
                     sb.append("\nDifference at line ").append(lineNumber)
@@ -184,7 +184,7 @@ public class EarDifferences {
     }
 
     private String createInfoDifference(CustomFileTmp file, CustomFileTmp file2) {
-        String header = "\nFile " + file.getName() + " ha differenze con il file " + file2.getName() + "\n";
+        String header = "\nFile " + file.getName() + " has difference with " + file2.getName() + "\n";
         String descriptionFile1 = file.getName() + " - size: " + file.getSize() + "\n";
         String descriptionFile2 = file2.getName() + " - size: " + file2.getSize() + "\n";
         return header + descriptionFile1 + descriptionFile2;
