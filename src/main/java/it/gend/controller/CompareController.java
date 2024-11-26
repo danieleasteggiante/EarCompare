@@ -32,9 +32,18 @@ public class CompareController {
         EarProperties earProperties2 = rapidChecks(fileEar2);
         if (earProperties2.equals(earProperties1))
             return generateEarDifferences(earProperties1, earProperties2);
-        deepCheck(new CustomFileTmp(fileEar1.getPath(), fileEar1.getName(), Files.readAllBytes(fileEar1.toPath()), fileEar1.length(), fileEar1.lastModified()), earProperties1);
-        deepCheck(new CustomFileTmp(fileEar2.getPath(), fileEar2.getName(), Files.readAllBytes(fileEar2.toPath()), fileEar2.length(), fileEar2.lastModified()), earProperties2);
+        deepCheck(createRootFile(fileEar1), earProperties1);
+        deepCheck(createRootFile(fileEar2), earProperties2);
         return generateEarDifferences(earProperties1, earProperties2);
+    }
+
+    private static CustomFileTmp createRootFile(File fileEar1) {
+        try {
+            return new CustomFileTmp(fileEar1.getPath(), fileEar1.getName(), Files.readAllBytes(fileEar1.toPath()), fileEar1.length(), fileEar1.lastModified());
+        } catch (IOException e) {
+            System.err.println("Error while creating root file " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     private static EarDifferences generateEarDifferences(EarProperties earProperties1, EarProperties earProperties2) {

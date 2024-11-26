@@ -7,7 +7,6 @@ import it.gend.domain.InputUser;
 
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.SortedMap;
 
 /**
  * @author Daniele Asteggiante
