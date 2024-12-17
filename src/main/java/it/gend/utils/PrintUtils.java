@@ -6,6 +6,9 @@ import it.gend.domain.EarDifferences;
 import it.gend.domain.InputUser;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -99,5 +102,29 @@ public class PrintUtils {
         System.out.println(" - Select 3 for print files with differences");
         System.out.println(" - Select 4 for create txt report");
         System.out.println(" - Select 5 for exit");
+    }
+
+    public static void printClassesPath(List<String> classesPathFinded) {
+        System.out.println("[+] Classes path finded:");
+        if(classesPathFinded.isEmpty()){
+            System.out.println("[-] No classes finded");
+            return;
+        }
+        for (String path : classesPathFinded) {
+            System.out.println("[+] " + path);
+        }
+    }
+
+    public static Map<String,String> pathToSearch() {
+        Scanner scanner = new Scanner(System.in);
+        Map<String,String> map = new HashMap<>();
+        System.out.println("[+] Classes ear to find in: ");
+        String path = scanner.nextLine();
+        map.put("path", path);
+        System.out.println("[+] Classes name to Find: ");
+        String name = scanner.nextLine();
+        map.put("name", name);
+        return map;
+
     }
 }

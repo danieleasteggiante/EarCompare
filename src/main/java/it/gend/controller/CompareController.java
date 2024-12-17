@@ -66,7 +66,6 @@ public class CompareController {
             if (entry.isDirectory()) continue;
             earProperties.getFiles().add(getFileFromEntry(jarFile, entry));
         }
-
     }
 
     private static JarFile createJarFile(CustomFileTmp fileEar) {
@@ -85,7 +84,7 @@ public class CompareController {
         }
     }
 
-    private static CustomFileTmp getFileFromEntry(JarFile jarFile, JarEntry entry) {
+    protected static CustomFileTmp getFileFromEntry(JarFile jarFile, JarEntry entry) {
         try {
             Path tempJar = Files.createTempFile("tempJar", ".jar");
             Files.copy(jarFile.getInputStream(entry), tempJar, StandardCopyOption.REPLACE_EXISTING);
@@ -96,7 +95,7 @@ public class CompareController {
         }
     }
 
-    private static boolean isJavaArchive(JarEntry entry) {
+    protected static boolean isJavaArchive(JarEntry entry) {
         return entry.getName().endsWith(".jar") || entry.getName().endsWith(".war") || entry.getName().endsWith(".ear");
     }
 
